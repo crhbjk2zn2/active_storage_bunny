@@ -35,8 +35,8 @@ module ActiveStorage
       else
         instrument :download, key: key do
           io = StringIO.new object_for(key).get_file
-
           io.set_encoding(Encoding::BINARY)
+          io.read  # ✅ return the binary string
         end
       end
     end
