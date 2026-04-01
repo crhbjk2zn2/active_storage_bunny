@@ -35,8 +35,9 @@ module ActiveStorage
       else
         instrument :download, key: key do
           io = StringIO.new object_for(key).get_file
+
           io.set_encoding(Encoding::BINARY)
-          io.read  # ✅ return the binary string
+          io.read
         end
       end
     end
@@ -103,8 +104,6 @@ module ActiveStorage
     def upload_with_single_part(key, io, checksum: nil, content_type: nil, content_disposition: nil, custom_metadata: {})
       object_for(key).upload_file(body: io)
       object_for(key).purge_cache
-    rescue StandardError
-      raise ActiveStorage::IntegrityError
     end
 
     def stream(key, options = {}, &block)
